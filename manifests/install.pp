@@ -17,14 +17,24 @@
 #
 class vmwaretools::install {
 
-  include vmwaretools::install::package
+  include ::vmwaretools::install::package
 
-  if $vmwaretools::params::deploy_files == true {
-    include vmwaretools::install::archive
-    include vmwaretools::install::exec
+  if $::vmwaretools::params::deploy_files == true {
 
-    Class['vmwaretools::install::package'] ->
-    Class['vmwaretools::install::archive'] ->
-    Class['vmwaretools::install::exec']
+    file { $::vmwaretools::working_dir:
+      ensure => directory,
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0700',
+    }
+
+    class { '::vmwaretools::install::archive':
+      require => [Class['::vmwaretools::install::package'],File[$::vmwaretools::working_dir]],
+    }
+
+    class { '::vmwaretools::install::exec':
+      require => Class['::vmwaretools::install::archive'],
+    }
+
   }
 }

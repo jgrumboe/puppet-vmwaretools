@@ -1,5 +1,140 @@
 # Change Log
 
+## 3.0.1
+
+### 2017-09-01 - Bugfix Release
+
+#### Class: `vmwaretools`
+  * Fixing type regression for `$archive_md5` parameter
+
+## 3.0.0
+
+### 2017-03-10 - Major Version Release
+
+#### Puppet 3 Support Removed
+  * This module no longer supports Puppet 3. If you require Puppet 3 functionality, please use version [2.4.1 from the Puppet Forge](https://forge.puppet.com/CraigWatson1987/vmwaretools/readme), or the [puppet3](https://github.com/craigwatson/puppet-vmwaretools/tree/puppet3) branch in Git.
+
+## 2.4.1
+
+### 2016-12-30 - Bugfix Release
+
+#### Class: `vmwaretools`
+  * Fixing more stdlib deprecation warnings
+
+## 2.4.0
+
+### 2016-12-30 - Feature Release
+
+#### Class: `vmwaretools`
+  * Fixing stdlib deprecation warnings
+
+#### Fact: `vmwaretools_version`
+  * Adding fact output for vSphere 6.5 as reported in [#83](https://github.com/craigwatson/puppet-vmwaretools/issues/83) by [topei](https://github.com/toepi)
+
+## 2.3.0
+
+### 2016-06-20 - Feature Release
+
+#### Class: `vmwaretools`
+  * New parameter: `clean_failed_downloads` (default: `false`). As requested in [#80](https://github.com/craigwatson/puppet-vmwaretools/issues/80), setting this to `true` will cause the HTTP download script to remove the downloaded copy of the archive on failure. **NOTE** that this will be default to `true` in a future release.
+
+#### Class: `vmwaretools::params`
+  * Majorly reworked logic for `deploy_files` to fully remove `Unknown variable` warnings and odd deployment behaviour on Puppet 3.
+  * Moved `download_vmwaretools` variable from main class
+
+#### Class: `vmwaretools::install::exec`
+  * Do not require the `curl` package is `vmwaretools::manage_curl_pkgs` is `false` (possible dependency problem)
+
+#### Template: `download.sh.erb`
+  * Adding failed download clean-up function
+  * Making the script slightly more glob-proof
+
+#### Global
+  * Using top-scope everywhere within the module
+
+## 2.2.3
+
+### 2016-06-17 - Bugfix Release
+
+#### Class: `vmwaretools::params`
+  * Changing logic behind `deploy_files` parameter to fix `Unknown variable: 'deploy_files'` warnings
+
+#### Global
+  * Fixing permissions issues reported in [#81](https://github.com/craigwatson/puppet-vmwaretools/issues/81)
+
+## 2.2.2
+
+### 2016-06-11 - Bugfix Release
+
+#### Class: `vmwaretools::install::package`
+  * Now using stdlib's `ensure_packages` function rather than declaring packages manually to reduce the risk of collisions
+
+## 2.2.1
+
+### 2016-03-25 - Bugfix Release
+
+#### Class: `vmwaretools`
+  * Fixing Puppet 4 issue with `undef` default value for `curl_proxy` parameter (new default - `false`) - thanks [dutsmiller](https://github.com/dutsmiller) for pull request [#79](https://github.com/craigwatson/puppet-vmwaretools/pull/79)
+
+## 2.2.0
+
+### 2016-03-14 - Feature Release
+
+#### Class: `vmwaretools`
+  * New parameter: `curl_proxy` (default: `undef`). This controls the passing of proxy options to the download.sh script - thanks [dutsmiller](https://github.com/dutsmiller) for pull request [#78](https://github.com/craigwatson/puppet-vmwaretools/pull/78)
+
+#### Template: `download.sh.erb`
+  * Optionally pass `-x` to `curl`
+
+## 2.1.2
+
+### 2015-09-10 - Bugfix Release
+
+#### Class: `vmwaretools::params`
+  * Corrected double declaration of `open-vm-tools` package - thanks to [SyBernot](https://github.com/SyBernot) for pull request [#74](https://github.com/craigwatson/puppet-vmwaretools/pull/74).
+
+## 2.1.1
+
+### 2015-09-03 - Bugfix Release
+
+#### Class: `vmwaretools::params`
+  * Adding packages to purge list, thanks to [Juan José Presa](https://github.com/juaningan) for PR [#73](https://github.com/craigwatson/puppet-vmwaretools/pull/73) (solves bug [#72](https://github.com/craigwatson/puppet-vmwaretools/issues/72)) - for full package list, see [params.pp](https://github.com/craigwatson/puppet-vmwaretools/blob/master/manifests/params.pp#L89).
+
+## 2.1.0
+
+### 2015-08-15 - Feature Release
+
+#### Class: `vmwaretools`
+  * New parameter: `ignore_autodetect` - this will allow bypassing of the autodetection mechanism that only runs the module on certain platforms. Only useful for testing,
+defaults to `false`.
+
+#### Fact: `vmwaretools_version`
+  * Removed the confine so that the fact now reports on non-VMware platforms.
+
+## 2.0.1
+
+### 2015-06-25 - Bugfix release
+
+#### Class: `vmwaretools::timesync`
+  * Added dependency on Exec['vmware_config_tools'] if VMware Tools are being deployed this run - fixes [#71](https://github.com/craigwatson/puppet-vmwaretools/issues/71)
+
+## 2.0.0
+
+### 2015-05-14 - Major release
+
+#### Class: `vmwaretools`
+  * Renamed `redhat_install_devel` parameter to `install_devel` to support SuSE-based OS families.
+
+#### Class: `vmwaretools::params`
+  * Added support for installing development tools on SuSE-based OS families.
+
+#### Class: `vmwaretools::install`
+  * Moved working directory declaration into this subclass to cut down on logic sprawl.
+  * Changed "arrow" relationship to explicit `require` parameters.
+
+#### Class: `vmwaretools::config`
+  * Removed.
+
 ## 1.4.1
 
 ### 2015-05-05 - Bug Fix
@@ -9,7 +144,7 @@
 
 ## 1.4.0
 
-### 2015-04-13 - Feature Improvement
+### 2015-04-13 - Feature Release
 
 #### Class: `vmwaretools`
   * Added new `force_install` parameter to trigger echoing 'yes' to the VMware Tools install script. Thanks to [Anthony Somerset](https://github.com/anthonysomerset) and [Mattias Geniar](https://github.com/mattiasgeniar) for the help with the issue!
@@ -32,7 +167,7 @@
 
 ## 1.3.0
 
-### 2015-01-30 - Feature Improvement
+### 2015-01-30 - Feature Release
 
 ### Class: `vmwaretools`
   * Added parameters to manage the installation of certain supporting packages - thanks to [Aaron Hicks](https://github.com/Aethylred) for Pull Request [#60](https://github.com/craigwatson/puppet-vmwaretools/pull/60)
@@ -42,7 +177,7 @@
 
 ## 1.2.0
 
-### 2014-12-09 - Feature Improvement
+### 2014-12-09 - Feature Release
 
 #### Class: `vmwaretools`
   * Added `prevent_upgrade` parameter to does not deploy files if the Puppet version is higher than the installed version)
@@ -51,7 +186,7 @@
 
 ## 1.1.0
 
-### 2014-10-02 - Feature Improvement
+### 2014-10-02 - Feature Release
 
 #### Class: `vmwaretools::params`
   * Added `vmware-tools-foundation` to purge_package_list to fully remove OSP tools - thanks to [Christian Groschupp](https://github.com/cgroschupp)
@@ -127,7 +262,7 @@
 
 ## 0.4.0
 
-### 2014-05-16 - Functionality Improvement
+### 2014-05-16 - Feature Release
 
 #### Class: `vmwaretools`
   * Improving support for downloading VMware Tools via external Puppet modules (thanks to [Sam Keeley](https://github.com/keeleysam) and [Aedu](https://github.com/Aedu) for Pull Requests [#36](https://github.com/craigwatson/puppet-vmwaretools/pull/36) and [#37](https://github.com/craigwatson/puppet-vmwaretools/pull/37) respectively)
@@ -144,7 +279,7 @@
 
 ## 0.3.0
 
-### 2014-04-14 - Functionality Improvement
+### 2014-04-14 - Feature Release
 
 #### Class: `vmwaretools` main
   * Adding `config_creates` parameter to main class declaration
@@ -192,14 +327,14 @@
 
 ## 0.2.1
 
-### 2013-10-31 - Functionality Improvement (non-SemVer increment)
+### 2013-10-31 - Feature Release (non-SemVer)
 
 #### Fact: `esx_version`
   * Adding support for vSphere 5.5. Thanks to [Ryan McKern](https://github.com/mckern) for the pull request [GitHub Issue #18](https://github.com/craigwatson/puppet-vmwaretools/pull/22)!
 
 ## 0.2.0
 
-### 2013-09-11 - Functionality Improvements
+### 2013-09-11 - Feature Release
 
 #### Fact: `esx_version`
   * New fact: reports the version of vSphere.
@@ -237,7 +372,7 @@
 
 ## 0.1.0
 
-### 2013-05-17 - Functionality Improvements
+### 2013-05-17 - Feature Release
 
 #### Fact: `vmwaretools_version`
   * Added "not installed" output if VMware Tools isn't installed

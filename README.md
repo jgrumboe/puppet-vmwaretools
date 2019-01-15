@@ -22,6 +22,14 @@
 
 This module manages the installation and upgrade of VMware Tools via the source code tarballs distributed by VMware.
 
+## Puppet 3 Support
+
+**Please note that the master branch of this module does not support Puppet 3!**
+
+On 31st December 2016, support for Puppet 3.x was withdrawn. As such, this module no longer supports Puppet 3, and is actively being migrated to Puppet 4 syntax.
+
+If you require Puppet 3 compatibility, please use version [2.4.1 from the Puppet Forge](https://forge.puppet.com/CraigWatson1987/vmwaretools/readme), or the [puppet3](https://github.com/craigwatson/puppet-vmwaretools/tree/puppet3) branch in Git.
+
 ## Module Description
 
 This module is designed to replace both the OSP packages provided by VMware's repositories and also the `open-vm-tools` package. The module is O/S independent (tested on Ubuntu and Red Hat systems).
@@ -37,7 +45,7 @@ Upgrading of currently installed VMware Tools packages is also supported - the m
 * Compares installed version with the configured version via the `vmwaretools` fact
 * Transfer the VMware Tools archive to the target agent (via Puppet or HTTP)
 * Untar the archive and run vmware-install-tools.pl (warning: this installer is run with the `-d` flag to accept all default answers).
-* Removes the `open-vm-tools` package.
+* Removes several packages, see [params.pp](https://github.com/craigwatson/puppet-vmwaretools/blob/master/manifests/params.pp#L89) for the complete list.
 
 ### Setup Requirements
 
@@ -82,10 +90,6 @@ To stop `vmwaretools` from trying to install the development packages, Perl pack
 
 ### Classes
 
-#### `vmaretools::config`
-
-  * Deploys the working directory in which the module downloads and extracts the archive, and  runs the Perl installer.
-
 #### `vmwaretools::install::exec`
 
   * Declares all `exec` commands run by the module.
@@ -115,9 +119,9 @@ To stop `vmwaretools` from trying to install the development packages, Perl pack
 
 ### Supported Operating Systems
 
-* Ubuntu - 12.04 LTS (Precise) and 10.04 LTS (Lucid) tested
-* Red Hat family - RHEL 5 and 6 tested
-* Debian family - written but untested, reports appreciated
+* Ubuntu/Debian
+* CentOS/RedHat
+* SuSE/SLES
 
 ### Unsupported Operating Systems
 
@@ -125,7 +129,7 @@ To stop `vmwaretools` from trying to install the development packages, Perl pack
 
 ## Development
 
-* Copyright (C) 2013 Craig Watson - <craig@cwatson.org>
+* Copyright (C) 2013 to 2015 Craig Watson - <craig@cwatson.org>
 * VMware Tools fact by [janorn](https://github.com/janorn/puppet-vmwaretools)
 * Distributed under the terms of the Apache License v2.0 - see LICENSE file for details.
 * **Please note** that the module was licensed under the terms of the GNU General Public License v3 until commit [fea91b58241481fc3fc4aa0e02996cc9ef0f131e](https://github.com/craigwatson/puppet-vmwaretools/commit/fea91b58241481fc3fc4aa0e02996cc9ef0f131e)
